@@ -68,13 +68,38 @@ by the time you read this.
 
 # Installation
 
-I tested this on Fedora 33. There was no repository that had pre-built
-CRoaring libraries, so I downloaded the CRoaring stuff from github and built
-it locally.  Note that to get a shared, instead of static, library, I had to
-edit the `CMakeCache.txt` in my `build` directory and change
-`ROARING_BUILD_STATIC` to `OFF`.
+## install with pacakge manager
 
-A `make install` put the headers and shared libraries in `/usr/local/...` I'm
+### Ubuntu
+
+```shell
+sudo apt install -y libroaring-dev
+```
+
+## build and install CRoaring from source code
+
+I tested this on Fedora 33 and macOS(support Apple Sillicon too).
+There was no repository that had pre-built CRoaring libraries
+(on macOS `brew install croaring` only build and install static library of croaring but `cl-roaring` require shared library).
+
+Downloaded the CRoaring stuff from github and built it locally with commands:
+
+```shell
+# get latest version number at page https://github.com/RoaringBitmap/CRoaring/releases
+export CROARING_VERSION="3.0.1"
+cd /usr/local/src/
+curl -o "CRoaring-${CROARING_VERSION}.tar.gz" -L "https://github.com/RoaringBitmap/CRoaring/archive/refs/tags/v${CROARING_VERSION}.tar.gz"
+tar -xzf "CRoaring-${CROARING_VERSION}.tar.gz"
+cd "CRoaring-${CROARING_VERSION}"
+mkdir build
+cd build
+# build dynamic library(libroaring.so/libroaring.dylib/libroaring.dll)
+cmake -DROARING_BUILD_STATIC=OFF ..
+cmake --build . -v
+cmake --install .
+```
+
+The command `cmake --install .` put the headers and shared libraries in `/usr/local/...` I'm
 not sure what best practies are for Common Lisp CFFI in this regard, but for
 now I have `#p"/usr/local/lib64/libroaring.so"` in my call to
 `define-foreign-library`.  Hopefully that works for you.

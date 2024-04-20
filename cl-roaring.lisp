@@ -10,6 +10,9 @@
   ;; #p"/home/dave/CRoaring/build/libroaring.so"
   ;; Note that by default CRoaring builds static libraries, I had to edit 
   ;; CRoaring/build/CMakeCache.txt and change the value of ROARING_BUILD_STATIC
+  (:darwin (:or "libroaring.dylib"
+                #p"/usr/lib/libroaring.dylib"
+                #p"/usr/local/lib/libroaring.dylib"))
   (:unix (:or "libroaring.so"
               #p"/usr/local/lib64/libroaring.so"))
   (t (:default "libroaring")))
